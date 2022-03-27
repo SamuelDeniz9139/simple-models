@@ -37,7 +37,8 @@ const hostPage3 = (req, res) => {
 const hostPage4 = (req, res) => {
   res.render('page4');
 };
-const getName = (req, res) => res.json({ name: lastCat.name });
+const getCat = (req, res) => res.json({ name: lastCat.name });
+const getDog = (req, res) => res.json({ name: lastDog.name });
 const catName = async (req, res) => {
   if (!req.body.firstname || !req.body.lastname || !req.body.beds) {
     return res.status(400).json({ error: 'firstname, lastname and beds are all required' });
@@ -138,7 +139,8 @@ module.exports = {
   page2: hostPage2,
   page3: hostPage3,
   page4: hostPage4,
-  getName,
+  getCat,
+  getDog,
   dogName,
   catName,
   updateCat,
