@@ -1,5 +1,6 @@
 const models = require('../models');
 const { Cat } = models;
+const { Dog } = models;
 const defaultData = {
   name: 'unknown',
   bedsOwned: 0,
@@ -28,7 +29,7 @@ const hostPage3 = (req, res) => {
   res.render('page3');
 };
 const getName = (req, res) => res.json({ name: lastAdded.name });
-const setName = async (req, res) => {
+const catName = async (req, res) => {
   if (!req.body.firstname || !req.body.lastname || !req.body.beds) {
     return res.status(400).json({ error: 'firstname, lastname and beds are all required' });
   }
@@ -47,6 +48,29 @@ const setName = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: 'failed to create cat' });
+  }
+};
+const dogName = async (req, res) => {
+  if (!req.body.firstname || !req.body.lastname || !req.body.age || !req.body.breed) {
+    return res.status(400).json({ error: 'first & last name, breed, and age are all required' });
+  }
+  const dogData = {
+    name: `${req.body.firstname} ${req.body.lastname}`,
+    age: req.body.age,
+    breed: req.body.breed,
+  };
+  const newDog = new Dog(dogData);
+  try {
+    await newDog.save();
+    lastAdded = newDog;
+    return res.json({
+      name: lastAdded.name,
+      age: lastAdded.age,
+      breed: lastAdded.breed,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'failed to create dog' });
   }
 };
 const searchName = async (req, res) => {
@@ -87,7 +111,8 @@ module.exports = {
   page2: hostPage2,
   page3: hostPage3,
   getName,
-  setName,
+  dogName,
+  catName,
   updateLast,
   searchName,
   notFound,
