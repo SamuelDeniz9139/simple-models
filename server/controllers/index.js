@@ -1,14 +1,20 @@
 const models = require('../models');
 const { Cat } = models;
 const { Dog } = models;
-const defaultData = {
+const defaultCatData = {
   name: 'unknown',
   bedsOwned: 0,
 };
-let lastAdded = new Cat(defaultData);
+const defaultDogData = {
+  name: 'unknown',
+  age: 0,
+  breed: 'nobody cares',
+};
+let lastCat = new Cat(defaultCatData);
+let lastDog = new Dog(defaultDogData);
 const hostIndex = (req, res) => {
   res.render('index', {
-    currentName: lastAdded.name,
+    currentName: lastCat.name,
     title: 'Home',
     pageName: 'Home Page',
   });
@@ -28,7 +34,7 @@ const hostPage2 = (req, res) => {
 const hostPage3 = (req, res) => {
   res.render('page3');
 };
-const getName = (req, res) => res.json({ name: lastAdded.name });
+const getName = (req, res) => res.json({ name: lastCat.name });
 const catName = async (req, res) => {
   if (!req.body.firstname || !req.body.lastname || !req.body.beds) {
     return res.status(400).json({ error: 'firstname, lastname and beds are all required' });
@@ -40,10 +46,10 @@ const catName = async (req, res) => {
   const newCat = new Cat(catData);
   try {
     await newCat.save();
-    lastAdded = newCat;
+    lastCat = newCat;
     return res.json({
-      name: lastAdded.name,
-      beds: lastAdded.bedsOwned,
+      name: lastCat.name,
+      beds: lastCat.bedsOwned,
     });
   } catch (err) {
     console.log(err);
@@ -51,8 +57,8 @@ const catName = async (req, res) => {
   }
 };
 const dogName = async (req, res) => {
-  if (!req.body.firstname || !req.body.lastname || !req.body.age || !req.body.breed) {
-    return res.status(400).json({ error: 'first & last name, breed, and age are all required' });
+  if (!req.body.firstname||!req.body.lastname||!req.body.age||!req.body.breed) {
+    return res.status(400).json({ error: 'names, breed, and age are all required' });
   }
   const dogData = {
     name: `${req.body.firstname} ${req.body.lastname}`,
@@ -62,30 +68,26 @@ const dogName = async (req, res) => {
   const newDog = new Dog(dogData);
   try {
     await newDog.save();
-    lastAdded = newDog;
+    lastDog = newDog;
     return res.json({
-      name: lastAdded.name,
-      age: lastAdded.age,
-      breed: lastAdded.breed,
+      name: lastDog.name,
+      age: lastDog.age,
+      breed: lastDog.breed,
     });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: 'failed to create dog' });
   }
 };
-const searchName = async (req, res) => {
+const searchCat = async (req, res) => {
   if (!req.query.name) {
     return res.status(400).json({ error: 'Name is required to perform a search' });
   }
   try {
     const doc = await Cat.findOne({ name: req.query.name }).exec();
-    const dod = await Dog.findOne({ name: req.query.name }).exec();
-    if (dod){
-      dod.age++;
-      return res.json({ name: dod.name, age: dod.age });
-    } else if(doc){
+    if (doc){
       return res.json({ name: doc.name, beds: doc.bedsOwned });
-    } else if (!doc&&!dod) {
+    } else {
       return res.json({ error: 'No animals found' });
     }
   } catch (err) {
@@ -93,12 +95,29 @@ const searchName = async (req, res) => {
     return res.status(500).json({ error: 'Something went wrong' });
   }
 };
+const searchDog = async (req, res) => {
+  if (!req.query.name) {
+    return res.status(400).json({ error: 'Name is required to perform a search' });
+  }
+  try {
+    const dod = await Dog.findOne({ name: req.query.name }).exec();
+    if (dod){
+      dod.age++;
+      return res.json({ name: dod.name, age: dod.age, breed: dod.breed });
+    } else {
+      return res.json({ error: 'No doggos found' });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'Something went wrong' });
+  }
+};
 const updateCat = (req, res) => {
-  lastAdded.bedsOwned++;
-  const savePromise = lastAdded.save();
+  lastCat.bedsOwned++;
+  const savePromise = lastCat.save();
   savePromise.then(() => res.json({
-    name: lastAdded.name,
-    beds: lastAdded.bedsOwned,
+    name: lastCat.name,
+    beds: lastCat.bedsOwned,
   }));
   savePromise.catch((err) => {
     console.log(err);
@@ -119,6 +138,7 @@ module.exports = {
   dogName,
   catName,
   updateCat,
-  searchName,
+  searchCat,
+  searchDog,
   notFound,
 };
