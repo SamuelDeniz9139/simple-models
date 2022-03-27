@@ -79,16 +79,21 @@ const searchName = async (req, res) => {
   }
   try {
     const doc = await Cat.findOne({ name: req.query.name }).exec();
-    if (!doc) {
-      return res.json({ error: 'No cats found' });
+    const dod = await Dog.findOne({ name: req.query.name }).exec();
+    if (dod){
+      dod.age++;
+      return res.json({ name: dod.name, age: dod.age });
+    } else if(doc){
+      return res.json({ name: doc.name, beds: doc.bedsOwned });
+    } else if (!doc&&!dod) {
+      return res.json({ error: 'No animals found' });
     }
-    return res.json({ name: doc.name, beds: doc.bedsOwned });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: 'Something went wrong' });
   }
 };
-const updateLast = (req, res) => {
+const updateCat = (req, res) => {
   lastAdded.bedsOwned++;
   const savePromise = lastAdded.save();
   savePromise.then(() => res.json({
@@ -113,7 +118,7 @@ module.exports = {
   getName,
   dogName,
   catName,
-  updateLast,
+  updateCat,
   searchName,
   notFound,
 };
