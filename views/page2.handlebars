@@ -1,0 +1,45 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <!-- passed in variables in handlebars are surrounded by two curly braces like the following
+       Any variable you pass into res.render will be available by name in the template through
+       the curly braces
+  -->
+  <title>{{title}}</title>
+</head>
+<body>
+  <h1>Welcome to page 2</h1>
+  
+  <!-- links or URLs are always GET resources as they are getting (retrieving) a resource -->
+  <a href="/">Home</a>
+  <a href="/page1">Page 1</a>
+  <a href="/page3">Page 3</a>
+  
+  <form action="/setName" method="POST">
+    <label for="firstname">First name:</label>
+    <input type="text" name="firstname" value="">
+    <label for="lastname">Last Name: </label>
+    <input type="text" name="lastname" value="">
+    <label for="beds">Beds:</label>
+    <input type="number" name="beds" value="">
+    <input type="submit" value="submit">
+  </form>
+  
+  <br/>
+  <br/>
+  
+
+  <form action="/updateLast" method="POST">
+    <input type="submit" value="Update Last">
+  </form>
+  
+  <br/>
+  <br/>
+  
+  <form action="findByName" method="GET">
+    <label for="name">Name to search for:</label>
+    <input type="text" name="name" value="">
+    <input type="submit" value="Submit">
+  </form>
+</body>
+</html>
