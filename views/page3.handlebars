@@ -4,10 +4,11 @@
   <title>{{title}}</title>
 </head>
 <body>
-  <h1>Welcome to page 3</h1>
+  <h1>Welcome to page 3.</h1>
   <a href="/">Home</a>
   <a href="/page1">Page 1</a>
   <a href="/page2">Page 2</a>
+  <a href="/page4">Page 4</a>
   <form action="/dogName" method="POST">
     <label for="firstname">First name:</label>
     <input type="text" name="firstname" value="">
@@ -21,7 +22,7 @@
   </form>
   <br/>
   <br/>
-  <form action="dogByName" method="GET">
+  <form action="/dogByName" method="GET">
     <label for="name">Name to search for:</label>
     <input type="text" name="name" value="">
     <input type="submit" value="Submit">
