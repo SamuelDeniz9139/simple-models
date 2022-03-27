@@ -10,6 +10,6 @@ const router = (app) => {
   app.get('/*', controllers.notFound);
   app.post('/catName', controllers.catName);
   app.post('/dogName', controllers.dogName);
-  app.post('/updateLast', controllers.updateLast);
+  app.post('/updateLast', controllers.updateCat);
 };
 module.exports = router;

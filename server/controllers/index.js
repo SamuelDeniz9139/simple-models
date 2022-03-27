@@ -88,16 +88,16 @@ const searchCat = async (req, res) => {
     if (doc){
       return res.json({ name: doc.name, beds: doc.bedsOwned });
     } else {
-      return res.json({ error: 'No animals found' });
+      return res.json({error:'No cats found.'});
     }
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ error: 'Something went wrong' });
+    return res.status(500).json({ error: 'Something went wrong.' });
   }
 };
 const searchDog = async (req, res) => {
   if (!req.query.name) {
-    return res.status(400).json({ error: 'Name is required to perform a search' });
+    return res.status(400).json({error: "Can't search without a name."});
   }
   try {
     const dod = await Dog.findOne({ name: req.query.name }).exec();
